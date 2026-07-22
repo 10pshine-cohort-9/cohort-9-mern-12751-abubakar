@@ -1,0 +1,75 @@
+# --------------------------------------
+# Node stuff – never commit node_modules
+# --------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# I'm keeping package-lock.json and yarn.lock because they lock dependency versions.
+# This is standard practice – they help everyone get the exact same setup.
+
+# --------------------------------
+# Secrets and environment variables
+# --------------------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# I’ll commit a .env.example instead so others know what keys to set.
+
+# --------------------------------
+# Logs and runtime junk
+# --------------------------------
+logs/
+*.log
+pids/
+*.pid
+
+# --------------------------------
+# Build output (React / any compiled stuff)
+# --------------------------------
+dist/
+build/
+out/
+.next/          # (just in case, though I'm using React)
+
+# --------------------------------
+# SonarQube temporary files
+# --------------------------------
+.scannerwork/
+.sonar/
+*.sonar-report.*
+
+# --------------------------------
+# My editor and IDE settings – nobody else needs these
+# --------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+*.sublime-*
+
+# --------------------------------
+# OS files that sneak in
+# --------------------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --------------------------------
+# Test coverage
+# --------------------------------
+coverage/
+.nyc_output/
+*.lcov
+
+# --------------------------------
+# Random compressed stuff
+# --------------------------------
+*.tgz
+*.tar.gz
