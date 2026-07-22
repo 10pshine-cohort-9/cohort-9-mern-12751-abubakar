@@ -15,8 +15,13 @@ app.get('/api/health', (req, res) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
+  }
+
   logger.error(err.message);
-  res.status(500).json({ error: 'Something went wrong' });
+  const status = Number.isInteger(err.status) ? err.status : err.statusCode;
+  res.status(Number.isInteger(status) && status >= 400 ? status : 500).json({ error: 'Something went wrong' });
 });
 
 module.exports = app;
