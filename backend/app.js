@@ -13,6 +13,10 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK' });
 });
 
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not Found' });
+});
+
 // Global error handler
 app.use((err, req, res, next) => {
   if (res.headersSent) {
