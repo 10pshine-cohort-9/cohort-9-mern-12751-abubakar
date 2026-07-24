@@ -6,12 +6,8 @@ const { expect } = chai;
 
 describe('GET /api/health', () => {
   it('should return OK', async () => {
-    try {
-      const res = await chai.request(app).get('/api/health');
-      expect(res).to.have.status(200);
-      expect(res.body.status).to.equal('OK');
-    } catch (error) {
-      throw new Error(`GET /api/health failed: ${error.message}`);
-    }
+    const res = await chai.request(app).get('/api/health');
+    expect(res).to.have.status(200);
+    expect(res.body.status).to.equal('OK');
   });
 });
