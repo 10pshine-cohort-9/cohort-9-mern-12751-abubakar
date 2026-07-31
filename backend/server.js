@@ -19,8 +19,11 @@ mongoose.connect(MONGO_URI)
 
     server.on('error', async (err) => {
       logger.error(err, 'HTTP server failed to start');
+
       try {
         await mongoose.disconnect();
+      } catch (disconnectErr) {
+        logger.error(disconnectErr, 'MongoDB disconnect failed');
       } finally {
         process.exit(1);
       }
