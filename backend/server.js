@@ -7,6 +7,11 @@ const rawPort = process.env.PORT || '5000';
 const PORT = Number(rawPort);
 const MONGO_URI = process.env.MONGO_URI;
 
+if (typeof MONGO_URI !== 'string' || MONGO_URI.trim() === '') {
+  logger.error('MONGO_URI is required');
+  process.exit(1);
+}
+
 if (!Number.isInteger(PORT) || PORT < 1 || PORT > 65535) {
   logger.error(`Invalid PORT value: ${rawPort}`);
   process.exit(1);
