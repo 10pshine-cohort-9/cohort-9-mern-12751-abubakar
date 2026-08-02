@@ -36,7 +36,21 @@ exports.mochaHooks = {
     }
 
     if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(mongoUri);
+      try {
+        await mongoose.connect(mongoUri);
+      } catch (error) {
+        if (mongoose.connection.readyState !== 0) {
+          try {
+            await mongoose.connection.close();
+          } catch {
+            // Ignore close failures so the original setup error is preserved.
+          }
+        }
+
+        const setupError = new Error(`MongoDB test setup failed while connecting to the configured test database: ${error.message}`);
+        setupError.cause = error;
+        throw setupError;
+      }
     }
   },
 
