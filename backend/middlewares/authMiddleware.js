@@ -18,7 +18,12 @@ const protect = async (req, res, next) => {
     }
 
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (jwtError) {
+      throw new AppError('Not authorized, invalid or expired token', 401);
+    }
 
     // Attach user to request (excluding password)
     req.user = await User.findById(decoded.id).select('-password');

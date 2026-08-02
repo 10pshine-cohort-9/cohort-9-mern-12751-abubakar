@@ -3,7 +3,6 @@ const generateToken = require('../utils/generateToken');
 const AppError = require('../utils/AppError');
 const logger = require('../config/logger');
 
-// @desc    Register a new user
 // @route   POST /api/auth/register
 const register = async (req, res, next) => {
   try {
@@ -16,12 +15,20 @@ const register = async (req, res, next) => {
     }
 
     // Create user
-    const user = await User.create({ fullName, email, password });
+    let user;
+    try {
+      user = await User.create({ fullName, email, password });
+    } catch (createErr) {
+      if (createErr.code === 11000) {
+        throw new AppError('Email already registered', 409);
+      }
+      throw createErr;
+    }
 
     // Generate token
     const token = generateToken(user._id);
 
-    logger.info(`New user registered: ${user.email}`);
+    logger.info({ userId: user._id }, 'New user registered');
 
     res.status(201).json({
       success: true,
@@ -33,11 +40,13 @@ const register = async (req, res, next) => {
       },
     });
   } catch (error) {
+    if (error.name === 'ValidationError') {
+      return next(new AppError(Object.values(error.errors)[0].message, 400));
+    }
     next(error);
   }
 };
 
-// @desc    Login user
 // @route   POST /api/auth/login
 const login = async (req, res, next) => {
   try {
@@ -58,8 +67,8 @@ const login = async (req, res, next) => {
     // Generate token
     const token = generateToken(user._id);
 
-    logger.info(`User logged in: ${user.email}`);
-
+    logger.info({ userId: user._id }, 'User logged in');
+    
     res.status(200).json({
       success: true,
       data: {
@@ -74,7 +83,7 @@ const login = async (req, res, next) => {
   }
 };
 
-// @desc    Get current user profile
+// Get current user profile
 // @route   GET /api/auth/me
 const getMe = async (req, res, next) => {
   try {
