@@ -8,14 +8,35 @@ if (!process.env.JWT_SECRET) {
   process.env.JWT_SECRET = 'test-secret';
 }
 
+const TEST_DB_NAME_PATTERN = /(?:^|[_-])test(?:[_-]|$)/i;
+
+function getMongoDatabaseName(mongoUri) {
+  try {
+    return decodeURIComponent(new URL(mongoUri).pathname.replace(/^\/+/, ''));
+  } catch {
+    return '';
+  }
+}
+
 exports.mochaHooks = {
   async beforeAll() {
-    if (!process.env.MONGO_URI) {
-      throw new Error('MONGO_URI is required for tests. Add it to backend/.env');
+    const testMongoUri = typeof process.env.MONGO_URI_TEST === 'string' ? process.env.MONGO_URI_TEST.trim() : '';
+    const mongoUri = testMongoUri || (typeof process.env.MONGO_URI === 'string' ? process.env.MONGO_URI.trim() : '');
+
+    if (!mongoUri) {
+      throw new Error('Set MONGO_URI_TEST or point MONGO_URI at a dedicated test database before running tests.');
+    }
+
+    if (!testMongoUri) {
+      const databaseName = getMongoDatabaseName(mongoUri);
+
+      if (!databaseName || !TEST_DB_NAME_PATTERN.test(databaseName)) {
+        throw new Error('Unsafe MONGO_URI for tests. Use a dedicated test database name such as notesapp_test, or set MONGO_URI_TEST.');
+      }
     }
 
     if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(process.env.MONGO_URI);
+      await mongoose.connect(mongoUri);
     }
   },
 

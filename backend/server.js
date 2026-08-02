@@ -17,6 +17,11 @@ if (!Number.isInteger(PORT) || PORT < 1 || PORT > 65535) {
   process.exit(1);
 }
 
+if (typeof process.env.JWT_SECRET !== 'string' || process.env.JWT_SECRET.trim() === '') {
+  logger.error('JWT_SECRET is required');
+  process.exit(1);
+}
+
 mongoose.connect(MONGO_URI)
   .then(() => {
     logger.info('Connected to MongoDB');

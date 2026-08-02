@@ -16,7 +16,6 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 
-// 404 middleware
 app.use((req, res, next) => {
   const err = new Error("Route not found");
   err.status = 404;

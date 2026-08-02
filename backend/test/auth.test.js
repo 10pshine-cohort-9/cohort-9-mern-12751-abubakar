@@ -51,9 +51,9 @@ describe('Auth API', () => {
     it('should fail if required fields are missing', async () => {
       const res = await chai.request(app)
         .post('/api/auth/register')
-        .send({ email: 'test@test.com' }); // missing fullName and password
+        .send({ email: 'test@test.com' });
 
-      expect(res).to.have.status(400); // or whatever validation you add
+      expect(res).to.have.status(400);
       expect(res.body.success).to.be.false;
     });
   });
@@ -98,7 +98,6 @@ describe('Auth API', () => {
 
   describe('GET /api/auth/me', () => {
     it('should return current user profile when authenticated', async () => {
-      // First, register a user
       const registerRes = await chai.request(app)
         .post('/api/auth/register')
         .send({

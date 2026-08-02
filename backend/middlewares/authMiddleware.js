@@ -17,7 +17,6 @@ const protect = async (req, res, next) => {
       throw new AppError('Not authorized, no token provided', 401);
     }
 
-    // Verify token
     let decoded;
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -25,7 +24,6 @@ const protect = async (req, res, next) => {
       throw new AppError('Not authorized, invalid or expired token', 401);
     }
 
-    // Attach user to request (excluding password)
     req.user = await User.findById(decoded.id).select('-password');
     if (!req.user) {
       throw new AppError('User belonging to this token no longer exists', 401);
