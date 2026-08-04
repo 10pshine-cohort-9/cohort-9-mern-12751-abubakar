@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const logger = require('../config/logger');
 
 /**
  * Schema for user accounts – stores basic info and hashed passwords.
@@ -49,9 +50,14 @@ userSchema.pre('save', async function () {
   if (!this.isModified('password')) {
     return;
   }
-
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  } catch (error) {
+    // Log the real cause but throw a safe message
+    logger.error({ err: error }, 'bcrypt hashing failed');
+    throw new Error('Could not process password');
+  }
 });
 
 /**
@@ -60,7 +66,12 @@ userSchema.pre('save', async function () {
  * @returns {Promise<boolean>}
  */
 userSchema.methods.comparePassword = async function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
+  try {
+    return await bcrypt.compare(candidatePassword, this.password);
+  } catch (error) {
+    logger.error({ err: error }, 'bcrypt compare failed');
+    throw new Error('Could not verify password');
+  }
 };
 
 module.exports = mongoose.model('User', userSchema);

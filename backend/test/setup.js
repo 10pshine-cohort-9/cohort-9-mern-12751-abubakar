@@ -70,7 +70,13 @@ exports.mochaHooks = {
    */
   async afterAll() {
     if (mongoose.connection.readyState !== 0) {
-      await mongoose.connection.close();
+      try {
+        await mongoose.connection.close();
+      } catch (error) {
+        // Log the cleanup failure but don’t mask the original teardown error
+        console.error('Failed to close MongoDB connection during test cleanup:', error);
+        throw new Error(`Test teardown failed: ${error.message}`);
+      }
     }
   },
 };

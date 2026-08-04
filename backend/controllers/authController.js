@@ -54,8 +54,8 @@ const register = async (req, res, next) => {
  */
 const login = async (req, res, next) => {
   try {
-    // default req.body to {} in case the parser is missing
-    const { email, password } = req.body;
+    // default to an empty object if body is missing, then validate fields
+    const { email, password } = req.body || {};
 
     // validate that both fields are non-empty strings
     if (!email || !password || typeof email !== 'string' || typeof password !== 'string') {
