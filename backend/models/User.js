@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+// Schema for user accounts – stores basic info and hashed passwords.
+// Automatically hashes the password before saving, and provides
+// a helper to compare passwords during login.
 const userSchema = new mongoose.Schema(
   {
     fullName: {
@@ -29,6 +32,8 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Hash password before saving, but only if the password field was changed.
+// This prevents re‑hashing an already hashed password on unrelated updates.
 userSchema.pre('save', async function () {
   if (!this.isModified('password')) {
     return;
@@ -38,6 +43,11 @@ userSchema.pre('save', async function () {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
+/**
+ * Check if a given password matches the hashed one stored in the DB.
+ * @param {string} candidatePassword – password from the login form
+ * @returns {Promise<boolean>}
+ */
 userSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };

@@ -1,5 +1,9 @@
 const express = require('express');
 const router = express.Router();
+
+/**
+ * Auth related routes – register, login, and fetch current user.
+ */
 const {
   register,
   login,

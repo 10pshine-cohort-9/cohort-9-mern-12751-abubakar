@@ -4,25 +4,37 @@ const pinoHttp = require('pino-http');
 const logger = require('./config/logger');
 const authRoutes = require('./routes/authRoutes');
 
+/**
+ * Express application setup.
+ * Configures middleware, routes, and error handling.
+ */
 const app = express();
+
+// Basic Middleware
 app.use(cors());
 app.use(express.json());
 app.use(pinoHttp({ logger }));
 
+// Health check – used by monitoring or just to see if the server is alive
 app.get('/api/health', (req, res) => {
   logger.info('Health check');
   res.json({ status: 'OK' });
 });
 
+// Authentication routes
 app.use('/api/auth', authRoutes);
 
+// 404 handler Catch-all for unknown routes
 app.use((req, res, next) => {
   const err = new Error("Route not found");
   err.status = 404;
   next(err);
 });
 
-// Global error handler
+/**
+ * Global error handler.
+ * Sends consistent JSON errors and logs them with Pino.
+ */
 app.use((err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
@@ -33,17 +45,20 @@ app.use((err, req, res, next) => {
     ? err.message
     : 'Internal Server Error';
 
-  // Normalize frequent Mongo/Mongoose errors to client-friendly statuses.
+  // Handle specific error types
   if (err.name === 'ValidationError') {
     statusCode = 400;
     message = err.message;
   }
 
+  // Handle duplicate key (MongoDB 11000)
   if (err.code === 11000) {
     statusCode = 409;
     message = 'Duplicate key error';
   }
 
+  // If it's a known client error but not marked operational,
+  // still send the message (e.g. 404 from above)
   if (!err.isOperational && statusCode >= 400 && statusCode < 500 && typeof err.message === 'string') {
     message = err.message;
   }

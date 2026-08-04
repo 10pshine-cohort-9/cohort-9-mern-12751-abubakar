@@ -1,5 +1,10 @@
 const pino = require('pino');
 
+/**
+ * Pino logger instance.
+ * Redacts sensitive fields and uses pino‑pretty in dev.
+ * @module logger
+ */
 const loggerOptions = {
   level: process.env.LOG_LEVEL || 'info',
   redact: {
@@ -13,6 +18,7 @@ const loggerOptions = {
   },
 };
 
+// Pretty-print logs in non-production environments
 if (process.env.NODE_ENV !== 'production') {
   loggerOptions.transport = {
     target: 'pino-pretty',

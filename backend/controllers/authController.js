@@ -3,18 +3,19 @@ const generateToken = require('../utils/generateToken');
 const AppError = require('../utils/AppError');
 const logger = require('../config/logger');
 
-// @route   POST /api/auth/register
+/**
+ * POST /api/auth/register
+ * Creates a new user, returns a token. Rejects duplicate emails.
+ */
 const register = async (req, res, next) => {
   try {
     const { fullName, email, password } = req.body;
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       throw new AppError('Email already registered', 409);
     }
 
-    // Create user
     let user;
     try {
       user = await User.create({ fullName, email, password });
@@ -47,7 +48,10 @@ const register = async (req, res, next) => {
   }
 };
 
-// @route   POST /api/auth/login
+/**
+ * POST /api/auth/login
+ * Verifies credentials and returns a JWT.
+ */
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -83,8 +87,10 @@ const login = async (req, res, next) => {
   }
 };
 
-// Get current user profile
-// @route   GET /api/auth/me
+/**
+ * GET /api/auth/me
+ * Returns the profile of the currently logged‑in user.
+ */
 const getMe = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);

@@ -2,6 +2,11 @@ const jwt = require('jsonwebtoken');
 const AppError = require('../utils/AppError');
 const User = require('../models/User');
 
+/**
+ * Protects routes – checks for a valid JWT in the Authorization header.
+ * If token is missing or invalid, throws an error. Otherwise attaches
+ * the user object (without password) to req.user.
+ */
 const protect = async (req, res, next) => {
   try {
     let token;
