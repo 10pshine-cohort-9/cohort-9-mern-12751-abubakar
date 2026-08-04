@@ -3,6 +3,9 @@ const app = require('../app');
 
 const { expect } = chai;
 
+/**
+ * Returns the global Express error handler for testing.
+ */
 function getErrorHandler() {
   const stack = app.router?.stack || app._router?.stack || [];
   const layer = stack.find((candidate) => candidate.handle && candidate.handle.length === 4);

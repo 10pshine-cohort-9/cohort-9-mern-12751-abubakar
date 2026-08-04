@@ -15,7 +15,9 @@ app.use(cors());
 app.use(express.json());
 app.use(pinoHttp({ logger }));
 
-// Health check – used by monitoring or just to see if the server is alive
+/**
+ * Health-check endpoint – returns status OK.
+ */
 app.get('/api/health', (req, res) => {
   logger.info('Health check');
   res.json({ status: 'OK' });
@@ -24,7 +26,9 @@ app.get('/api/health', (req, res) => {
 // Authentication routes
 app.use('/api/auth', authRoutes);
 
-// 404 handler Catch-all for unknown routes
+/**
+ * Catch-all middleware for undefined routes.
+ */
 app.use((req, res, next) => {
   const err = new Error("Route not found");
   err.status = 404;
@@ -66,7 +70,7 @@ app.use((err, req, res, next) => {
   logger.error({ err }, 'Unhandled request error');
 
   res
-    .status(Number.isInteger(statusCode) && statusCode >= 400 ? statusCode : 500)
+    .status(Number.isInteger(statusCode) && statusCode >= 400 && statusCode <= 599 ? statusCode : 500)
     .json({
       success: false,
       error: message,

@@ -27,9 +27,18 @@ if (typeof process.env.JWT_SECRET !== 'string' || process.env.JWT_SECRET.trim() 
   process.exit(1);
 }
 
+if (process.env.JWT_SECRET === 'your_jwt_secret_here' || process.env.JWT_SECRET.length < 32) {
+  logger.error('JWT_SECRET must be a strong, long random string (min 32 chars)');
+  process.exit(1);
+}
+
 // Connect to database, then start listening
 mongoose.connect(MONGO_URI)
   .then(() => {
+    /**
+     * Callback executed after MongoDB connects successfully.
+     * Starts the HTTP server.
+     */
     logger.info('Connected to MongoDB');
     const server = app.listen(PORT, () => logger.info(`Server running on port ${PORT}`));
 

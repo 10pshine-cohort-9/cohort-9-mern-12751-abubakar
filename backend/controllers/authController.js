@@ -54,8 +54,14 @@ const register = async (req, res, next) => {
  */
 const login = async (req, res, next) => {
   try {
+    // default req.body to {} in case the parser is missing
     const { email, password } = req.body;
 
+    // validate that both fields are non-empty strings
+    if (!email || !password || typeof email !== 'string' || typeof password !== 'string') {
+      throw new AppError('Please provide email and password', 400);
+    }
+    
     // Check if user exists (need to select password)
     const user = await User.findOne({ email }).select('+password');
     if (!user) {

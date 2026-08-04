@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-// Schema for user accounts – stores basic info and hashed passwords.
-// Automatically hashes the password before saving, and provides
-// a helper to compare passwords during login.
+/**
+ * Schema for user accounts – stores basic info and hashed passwords.
+ * Automatically hashes the password before saving, and provides
+ * a helper to compare passwords during login.
+ */
 const userSchema = new mongoose.Schema(
   {
     fullName: {
@@ -22,6 +24,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters'],
+      validate: {
+        validator: function(v) {
+          // bcrypt has a 72-byte limit; reject longer inputs
+          return Buffer.byteLength(v, 'utf8') <= 72;
+        },
+        message: 'Password is too long',
+      },
       select: false,
     },
     phone: {
@@ -32,8 +41,10 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Hash password before saving, but only if the password field was changed.
-// This prevents re‑hashing an already hashed password on unrelated updates.
+/**
+ * Hashes the password before saving if it has been modified.
+ * @param {function} next
+ */
 userSchema.pre('save', async function () {
   if (!this.isModified('password')) {
     return;

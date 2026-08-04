@@ -1,4 +1,8 @@
 const express = require('express');
+
+/**
+ * Express router for authentication endpoints.
+ */
 const router = express.Router();
 
 /**

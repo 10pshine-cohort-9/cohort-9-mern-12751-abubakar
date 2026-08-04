@@ -1,9 +1,7 @@
 const pino = require('pino');
 
 /**
- * Pino logger instance.
- * Redacts sensitive fields and uses pino‑pretty in dev.
- * @module logger
+ * Configuration object for Pino logger.
  */
 const loggerOptions = {
   level: process.env.LOG_LEVEL || 'info',
@@ -13,18 +11,23 @@ const loggerOptions = {
       'req.headers.cookie',
       'password',
       'token',
+      'req.headers.authorization[*]',
     ],
     censor: '[REDACTED]',
   },
 };
 
-// Pretty-print logs in non-production environments
-if (process.env.NODE_ENV !== 'production') {
+// Pretty-print logs in development for easier reading
+if (process.env.NODE_ENV == 'development') {
   loggerOptions.transport = {
     target: 'pino-pretty',
     options: { colorize: true },
   };
 }
 
+/**
+ * Pre-configured Pino logger instance.
+ * @module logger
+ */
 const logger = pino(loggerOptions);
 module.exports = logger;
