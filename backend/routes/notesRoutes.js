@@ -8,10 +8,6 @@ const {
   deleteNote,
 } = require('../controllers/notesController');
 const { protect } = require('../middlewares/authMiddleware');
-
-/**
- * Notes CRUD routes (all protected).
- */
 router.use(protect);
 
 router.post('/', createNote);

@@ -7,32 +7,30 @@ const User = require('../models/User');
 chai.use(chaiHttp);
 const { expect } = chai;
 
-// Helper to get auth token
-const registerAndGetToken = async (userData) => {
+const registerAndGetUser = async (userData) => {
   const res = await chai.request(app)
     .post('/api/auth/register')
     .send(userData);
-  return res.body.data.token;
+  return res.body.data;
 };
 
 describe('Notes API', () => {
   let token;
-  let userId;
-  let anotherToken;
+  let primaryUser;
+  let otherUser;
 
   beforeEach(async () => {
     await Note.deleteMany({});
     await User.deleteMany({});
 
-    // Create main test user
-    token = await registerAndGetToken({
+    primaryUser = await registerAndGetUser({
       fullName: 'Note Tester',
       email: 'notetester@example.com',
       password: '123456',
     });
+    token = primaryUser.token;
 
-    // Create another user for ownership tests
-    anotherToken = await registerAndGetToken({
+    otherUser = await registerAndGetUser({
       fullName: 'Other User',
       email: 'other@example.com',
       password: '123456',
@@ -44,12 +42,13 @@ describe('Notes API', () => {
       const res = await chai.request(app)
         .post('/api/notes')
         .set('Authorization', `Bearer ${token}`)
-        .send({ title: 'My Note', content: '<p>Hello</p>' });
+        .send({ title: 'My Note', content: '<p>Hello</p><script>alert(1)</script>' });
 
       expect(res).to.have.status(201);
       expect(res.body.data).to.have.property('_id');
       expect(res.body.data.title).to.equal('My Note');
-      expect(res.body.data.user).to.exist;
+      expect(res.body.data.content).to.not.include('<script>');
+      expect(res.body.data.user).to.equal(String(primaryUser._id));
     });
 
     it('should fail without token', async () => {
@@ -71,9 +70,9 @@ describe('Notes API', () => {
   describe('GET /api/notes', () => {
     beforeEach(async () => {
       await Note.create([
-        { title: 'Note 1', content: 'Content 1', user: (await User.findOne({ email: 'notetester@example.com' }))._id },
-        { title: 'Note 2', content: 'Content 2', user: (await User.findOne({ email: 'notetester@example.com' }))._id },
-        { title: 'Other Note', content: 'Other Content', user: (await User.findOne({ email: 'other@example.com' }))._id },
+        { title: 'Note 1', content: 'Content 1', user: primaryUser._id },
+        { title: 'Note 2', content: 'Content 2', user: primaryUser._id },
+        { title: 'Other Note', content: 'Other Content', user: otherUser._id },
       ]);
     });
 
@@ -101,7 +100,7 @@ describe('Notes API', () => {
       const note = await Note.create({
         title: 'Secret',
         content: 'Secret content',
-        user: (await User.findOne({ email: 'notetester@example.com' }))._id,
+        user: primaryUser._id,
       });
 
       const res = await chai.request(app)
@@ -111,18 +110,18 @@ describe('Notes API', () => {
       expect(res).to.have.status(200);
     });
 
-    it('should return 403 if not owner', async () => {
+    it('should return 404 if not owner', async () => {
       const note = await Note.create({
         title: 'Not yours',
         content: 'Content',
-        user: (await User.findOne({ email: 'other@example.com' }))._id,
+        user: otherUser._id,
       });
 
       const res = await chai.request(app)
         .get(`/api/notes/${note._id}`)
         .set('Authorization', `Bearer ${token}`);
 
-      expect(res).to.have.status(403);
+      expect(res).to.have.status(404);
     });
   });
 
@@ -131,8 +130,10 @@ describe('Notes API', () => {
       const note = await Note.create({
         title: 'Old',
         content: 'Old',
-        user: (await User.findOne({ email: 'notetester@example.com' }))._id,
+        user: primaryUser._id,
       });
+
+      const before = await Note.findById(note._id);
 
       const res = await chai.request(app)
         .put(`/api/notes/${note._id}`)
@@ -141,6 +142,8 @@ describe('Notes API', () => {
 
       expect(res).to.have.status(200);
       expect(res.body.data.title).to.equal('Updated');
+      const after = await Note.findById(note._id);
+      expect(after.updatedAt.getTime()).to.be.greaterThan(before.updatedAt.getTime());
     });
   });
 
@@ -149,7 +152,7 @@ describe('Notes API', () => {
       const note = await Note.create({
         title: 'Delete me',
         content: 'Bye',
-        user: (await User.findOne({ email: 'notetester@example.com' }))._id,
+        user: primaryUser._id,
       });
 
       const res = await chai.request(app)

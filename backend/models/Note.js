@@ -1,8 +1,4 @@
 const mongoose = require('mongoose');
-
-/**
- * Schema for user notes with rich-text content.
- */
 const noteSchema = new mongoose.Schema(
   {
     title: {
@@ -14,11 +10,13 @@ const noteSchema = new mongoose.Schema(
     content: {
       type: String,
       required: [true, 'Note content is required'],
-      // will be sanitized HTML
     },
     tags: {
       type: [String],
       default: [],
+      set: (arr) => Array.isArray(arr)
+        ? arr.map((tag) => String(tag).trim()).filter(Boolean)
+        : [],
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -30,7 +28,6 @@ const noteSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Compound index for user-specific queries sorted by update time
 noteSchema.index({ user: 1, updatedAt: -1 });
 
 module.exports = mongoose.model('Note', noteSchema);

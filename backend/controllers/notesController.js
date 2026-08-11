@@ -1,13 +1,9 @@
 const Note = require('../models/Note');
 const AppError = require('../utils/AppError');
 const logger = require('../config/logger');
-const { clean } = require('../utils/sanitizeHtml');
-const asyncHandler = require('../utils/asyncHandler'); // optional
+const { clean } = require('../utils/sanitizeHTML');
+const asyncHandler = require('../utils/asyncHandler');
 
-/**
- * POST /api/notes
- * Create a new note for the authenticated user.
- */
 const createNote = asyncHandler(async (req, res) => {
   const { title, content, tags } = req.body || {};
 
@@ -32,23 +28,24 @@ const createNote = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * GET /api/notes
- * Returns all notes for the logged-in user.
- * Optional query params: ?search=keyword&sortBy=updatedAt
- */
 const getNotes = asyncHandler(async (req, res) => {
   const { search, sortBy } = req.query;
   const filter = { user: req.user.id };
 
-  if (search) {
+  const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  if (typeof search === 'string' && search.trim()) {
+    const q = escapeRegex(search.trim());
     filter.$or = [
-      { title: { $regex: search, $options: 'i' } },
-      { content: { $regex: search, $options: 'i' } },
+      { title: { $regex: q, $options: 'i' } },
+      { content: { $regex: q, $options: 'i' } },
     ];
   }
 
-  const sortOption = sortBy === 'createdAt' ? { createdAt: -1 } : { updatedAt: -1 };
+  const sortOption =
+    sortBy === 'createdAt'
+      ? { createdAt: -1, _id: -1 }
+      : { updatedAt: -1, _id: -1 };
 
   const notes = await Note.find(filter).sort(sortOption).select('-__v');
 
@@ -59,10 +56,6 @@ const getNotes = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * GET /api/notes/:id
- * Get a single note by ID (owner only).
- */
 const getNoteById = asyncHandler(async (req, res) => {
   const note = await Note.findById(req.params.id);
 
@@ -70,9 +63,8 @@ const getNoteById = asyncHandler(async (req, res) => {
     throw new AppError('Note not found', 404);
   }
 
-  // Ownership check
   if (note.user.toString() !== req.user.id) {
-    throw new AppError('Not authorized to access this note', 403);
+    throw new AppError('Note not found', 404);
   }
 
   res.status(200).json({
@@ -81,10 +73,6 @@ const getNoteById = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * PUT /api/notes/:id
- * Update an existing note (owner only).
- */
 const updateNote = asyncHandler(async (req, res) => {
   const { title, content, tags } = req.body || {};
   let note = await Note.findById(req.params.id);
@@ -94,7 +82,7 @@ const updateNote = asyncHandler(async (req, res) => {
   }
 
   if (note.user.toString() !== req.user.id) {
-    throw new AppError('Not authorized to update this note', 403);
+    throw new AppError('Note not found', 404);
   }
 
   if (title) note.title = title;
@@ -111,10 +99,6 @@ const updateNote = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * DELETE /api/notes/:id
- * Delete a note (owner only).
- */
 const deleteNote = asyncHandler(async (req, res) => {
   const note = await Note.findById(req.params.id);
 
@@ -123,7 +107,7 @@ const deleteNote = asyncHandler(async (req, res) => {
   }
 
   if (note.user.toString() !== req.user.id) {
-    throw new AppError('Not authorized to delete this note', 403);
+    throw new AppError('Note not found', 404);
   }
 
   await note.deleteOne();

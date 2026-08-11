@@ -1,9 +1,5 @@
 const sanitizeHtml = require('sanitize-html');
 
-/**
- * Cleans HTML content to prevent XSS attacks.
- * Allows only safe tags and attributes.
- */
 const clean = (dirty) => {
   return sanitizeHtml(dirty, {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([
@@ -12,6 +8,10 @@ const clean = (dirty) => {
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       img: ['src', 'alt'],
+    },
+    allowedSchemes: ['http', 'https', 'mailto'],
+    allowedSchemesByTag: {
+      img: ['http', 'https'],
     },
   });
 };
