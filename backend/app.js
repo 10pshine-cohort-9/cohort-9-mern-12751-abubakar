@@ -3,6 +3,7 @@ const cors = require('cors');
 const pinoHttp = require('pino-http');
 const logger = require('./config/logger');
 const authRoutes = require('./routes/authRoutes');
+const notesRoutes = require('./routes/notesRoutes');
 
 /**
  * Express application setup.
@@ -25,6 +26,9 @@ app.get('/api/health', (req, res) => {
 
 // Authentication routes
 app.use('/api/auth', authRoutes);
+
+// Notes routes (protected)
+app.use('/api/notes', notesRoutes);
 
 /**
  * Catch-all middleware for undefined routes.
