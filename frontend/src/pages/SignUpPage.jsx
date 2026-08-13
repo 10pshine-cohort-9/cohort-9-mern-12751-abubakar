@@ -190,7 +190,7 @@ const SignUpPage = () => {
           <button
             type="submit"
             disabled={authLoading}
-            className="w-full bg-gradient-to-r from-primary to-secondary text-white font-semibold py-3 rounded-lg hover:shadow-[0_0_15px_rgba(79,70,229,0.5)] transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            className="w-full bg-linear-to-r from-primary to-secondary text-white font-semibold py-3 rounded-lg hover:shadow-[0_0_15px_rgba(79,70,229,0.5)] transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
             {authLoading ? 'Creating account...' : 'Sign Up'}
           </button>

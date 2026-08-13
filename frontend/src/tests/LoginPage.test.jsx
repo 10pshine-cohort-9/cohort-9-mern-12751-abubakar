@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -104,7 +104,60 @@ describe('LoginPage', () => {
     expect(
       screen.getByLabelText(/password/i)
     ).toBeDisabled();
+   });
+ 
+   it('logs in successfully', async () => {
+  const login = vi.fn().mockResolvedValue();
+
+  renderLoginPage({ login });
+
+  fireEvent.change(screen.getByLabelText(/email/i), {
+    target: { value: 'john@example.com' },
   });
+
+  fireEvent.change(screen.getByLabelText(/password/i), {
+    target: { value: 'password123' },
+  });
+
+  fireEvent.click(
+    screen.getByRole('button', {
+      name: /^login$/i,
+    })
+  );
+
+  expect(login).toHaveBeenCalledWith(
+    'john@example.com',
+    'password123'
+  );
+});
+ 
+ it('shows an error when login fails', async () => {
+   const login = vi.fn().mockRejectedValue(
+     new Error('Invalid credentials')
+   );
+ 
+   renderLoginPage({ login });
+ 
+   fireEvent.change(screen.getByLabelText(/email/i), {
+     target: { value: 'john@example.com' },
+   });
+ 
+   fireEvent.change(screen.getByLabelText(/password/i), {
+     target: { value: 'wrongpassword' },
+   });
+ 
+   fireEvent.click(
+     screen.getByRole('button', {
+       name: /^login$/i,
+     })
+   );
+ 
+   expect(
+    await screen.findByRole('alert')
+   ).toHaveTextContent(
+    /login failed\. please check your email and password/i
+  );
+ });
 
   it('does not render the login form when the user is authenticated', () => {
     renderLoginPage({

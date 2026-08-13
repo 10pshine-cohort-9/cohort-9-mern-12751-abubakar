@@ -6,7 +6,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AuthContext } from '../context/AuthContext';
 import SignUpPage from '../pages/SignUpPage';
 
-const navigateMock = vi.fn();
+const { navigateMock } = vi.hoisted(() => ({
+  navigateMock: vi.fn(),
+}));
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -123,9 +125,7 @@ describe('SignUpPage', () => {
       target: { value: '123' },
     });
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /^sign up$/i })
-    );
+    fireEvent.submit(screen.getByRole('button', { name: /sign up/i }));
 
     expect(
       screen.getByText(/at least 6 characters/i)
