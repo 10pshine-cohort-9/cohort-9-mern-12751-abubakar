@@ -99,42 +99,38 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (email, password) => {
-    setAuthLoading(true);
-    setAuthError(null);
+  const login = (email, password) => {
+  setAuthLoading(true);
+  setAuthError(null);
 
-    try {
-      return await authenticate(
-        '/auth/login',
-        {
-          email,
-          password,
-        },
-        'Login failed. Please try again.'
-      );
-    } finally {
-      setAuthLoading(false);
-    }
-  };
+  return authenticate(
+    '/auth/login',
+    {
+      email,
+      password,
+    },
+    'Login failed. Please try again.'
+  ).finally(() => {
+    setAuthLoading(false);
+  });
+};
 
-  const register = async (fullName, email, password) => {
-    setAuthLoading(true);
-    setAuthError(null);
+  const register = (fullName, email, password) => {
+  setAuthLoading(true);
+  setAuthError(null);
 
-    try {
-      return await authenticate(
-        '/auth/register',
-        {
-          fullName,
-          email,
-          password,
-        },
-        'Registration failed. Please try again.'
-      );
-    } finally {
-      setAuthLoading(false);
-    }
-  };
+  return authenticate(
+    '/auth/register',
+    {
+      fullName,
+      email,
+      password,
+    },
+    'Registration failed. Please try again.'
+  ).finally(() => {
+    setAuthLoading(false);
+  });
+};
 
   const logout = () => {
     localStorage.removeItem('token');
