@@ -1,11 +1,18 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import api from '../services/api';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import api, { setUnauthorizedHandler } from '../services/api';
 
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => localStorage.getItem('token'));
+  const [token, setToken] = useState(() =>
+    localStorage.getItem('token')
+  );
   const [loading, setLoading] = useState(true);
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState(null);
@@ -30,7 +37,6 @@ export const AuthProvider = ({ children }) => {
         const res = await api.get('/auth/me');
 
         if (mounted) {
-          setToken(storedToken);
           setUser(res.data.data);
         }
       } catch (error) {
@@ -42,7 +48,11 @@ export const AuthProvider = ({ children }) => {
             setUser(null);
           }
         } else if (mounted) {
+          setAuthError(
+            'Unable to verify your session. Please try again.'
+          );
           setToken(storedToken);
+          setUser(null);
         }
       } finally {
         if (mounted) {
@@ -58,18 +68,16 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  const login = async (email, password) => {
-    setAuthLoading(true);
-    setAuthError(null);
-
+  // Shared authentication logic for login and registration
+  const authenticate = async (
+    endpoint,
+    payload,
+    fallbackMessage
+  ) => {
     try {
-      const res = await api.post('/auth/login', {
-        email,
-        password,
-      });
+      const res = await api.post(endpoint, payload);
 
       const data = res.data.data;
-
       const { token: newToken, ...userData } = data;
 
       if (!newToken) {
@@ -84,11 +92,26 @@ export const AuthProvider = ({ children }) => {
       return userData;
     } catch (error) {
       setAuthError(
-        error.response?.data?.error ||
-          'Login failed. Please try again.'
+        error.response?.data?.error || fallbackMessage
       );
 
       throw error;
+    }
+  };
+
+  const login = async (email, password) => {
+    setAuthLoading(true);
+    setAuthError(null);
+
+    try {
+      return await authenticate(
+        '/auth/login',
+        {
+          email,
+          password,
+        },
+        'Login failed. Please try again.'
+      );
     } finally {
       setAuthLoading(false);
     }
@@ -99,33 +122,15 @@ export const AuthProvider = ({ children }) => {
     setAuthError(null);
 
     try {
-      const res = await api.post('/auth/register', {
-        fullName,
-        email,
-        password,
-      });
-
-      const data = res.data.data;
-
-      const { token: newToken, ...userData } = data;
-
-      if (!newToken) {
-        throw new Error('No authentication token received.');
-      }
-
-      localStorage.setItem('token', newToken);
-
-      setToken(newToken);
-      setUser(userData);
-
-      return userData;
-    } catch (error) {
-      setAuthError(
-        error.response?.data?.error ||
-          'Registration failed. Please try again.'
+      return await authenticate(
+        '/auth/register',
+        {
+          fullName,
+          email,
+          password,
+        },
+        'Registration failed. Please try again.'
       );
-
-      throw error;
     } finally {
       setAuthLoading(false);
     }
@@ -138,6 +143,15 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setAuthError(null);
   };
+
+  // Keep React auth state synchronized with Axios 401 responses
+  useEffect(() => {
+    setUnauthorizedHandler(logout);
+
+    return () => {
+      setUnauthorizedHandler(null);
+    };
+  }, []);
 
   const value = {
     user,
@@ -161,7 +175,9 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error('useAuth must be used inside an AuthProvider');
+    throw new Error(
+      'useAuth must be used inside an AuthProvider'
+    );
   }
 
   return context;
