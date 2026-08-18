@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -18,7 +17,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // If the user is already authenticated, redirect them.
   useEffect(() => {
     if (!loading && user) {
       const from = location.state?.from?.pathname || '/dashboard';
@@ -47,99 +45,151 @@ const LoginPage = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <p className="text-gray-300">Loading...</p>
+      <div className="flex min-h-[65vh] items-center justify-center">
+        <div className="glass-surface rounded-2xl px-8 py-10 text-center">
+          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-indigo-400" />
+          <p className="text-sm text-slate-400">
+            Loading...
+          </p>
+        </div>
       </div>
     );
   }
 
-  // Don't render the login form if already authenticated.
   if (user) {
     return null;
   }
 
   return (
-    <div className="max-w-md mx-auto mt-20">
-      <div className="glass p-8 rounded-2xl relative overflow-hidden">
-        <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/30 rounded-full blur-2xl" />
+    <div className="page-enter mx-auto flex min-h-[calc(100vh-8rem)] max-w-md items-center px-4 py-10 sm:px-0">
+      <div className="relative w-full">
+        <div
+          aria-hidden="true"
+          className="absolute -left-12 top-1/2 h-32 w-32 -translate-y-1/2 rounded-full bg-indigo-500/20 blur-3xl"
+        />
 
-        <h2 className="text-3xl font-bold mb-6 text-center text-white relative z-10">
-          Welcome Back
-        </h2>
+        <div
+          aria-hidden="true"
+          className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-purple-500/20 blur-3xl"
+        />
 
-        {error && (
-          <div
-            role="alert"
-            className="bg-red-500/20 text-red-300 p-3 rounded-lg mb-4 text-center border border-red-500/30 relative z-10"
-          >
-            {error}
+        <div className="glass-surface relative overflow-hidden rounded-3xl p-6 sm:p-8">
+          <div className="mb-8 text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-indigo-400/20 bg-indigo-500/10">
+              <span className="text-xl">✦</span>
+            </div>
+
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300">
+              NotesApp
+            </p>
+
+            <h1 className="text-3xl font-bold tracking-tight text-white">
+              Welcome Back
+            </h1>
+
+            <p className="mt-2 text-sm leading-6 text-slate-400">
+              Sign in and get back to your ideas.
+            </p>
           </div>
-        )}
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4 relative z-10"
-        >
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-gray-300 mb-1"
+          {error && (
+            <div
+              role="alert"
+              className="mb-5 flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm leading-5 text-red-300"
             >
-              Email
-            </label>
+              <span
+                aria-hidden="true"
+                className="mt-0.5"
+              >
+                !
+              </span>
 
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              <p>{error}</p>
+            </div>
+          )}
+
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-5"
+          >
+            <div>
+              <label
+                htmlFor="email"
+                className="mb-2 block text-sm font-medium text-slate-300"
+              >
+                Email
+              </label>
+
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={authLoading}
+                required
+                placeholder="you@example.com"
+                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition-all placeholder:text-slate-500 focus:border-indigo-400/50 focus:bg-white/[0.07] focus:ring-4 focus:ring-indigo-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            <div>
+              <div className="mb-2 flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-slate-300"
+                >
+                  Password
+                </label>
+              </div>
+
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={authLoading}
+                required
+                placeholder="Enter your password"
+                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition-all placeholder:text-slate-500 focus:border-indigo-400/50 focus:bg-white/[0.07] focus:ring-4 focus:ring-indigo-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            <button
+              type="submit"
               disabled={authLoading}
-              required
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-gray-300 mb-1"
+              className="group relative w-full overflow-hidden rounded-xl bg-linear-to-r from-indigo-500 to-purple-500 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/25 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
             >
-              Password
-            </label>
+              <span className="relative z-10">
+                {authLoading ? 'Logging in...' : 'Login'}
+              </span>
 
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={authLoading}
-              required
-            />
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 -translate-x-full bg-white/10 transition-transform duration-500 group-hover:translate-x-0"
+              />
+            </button>
+          </form>
+
+          <div className="my-6 flex items-center gap-3">
+            <div className="h-px flex-1 bg-white/10" />
+            <span className="text-xs text-slate-600">OR</span>
+            <div className="h-px flex-1 bg-white/10" />
           </div>
 
-          <button
-            type="submit"
-            disabled={authLoading}
-            className="w-full bg-linear-to-r from-primary to-secondary text-white font-semibold py-3 rounded-lg hover:shadow-[0_0_15px_rgba(79,70,229,0.5)] transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-          >
-            {authLoading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-
-        <p className="mt-6 text-center text-gray-400 relative z-10">
-          Don't have an account?{' '}
-          <Link
-            to="/signup"
-            className="text-primary hover:text-white transition-colors"
-          >
-            Sign up
-          </Link>
-        </p>
+          <p className="text-center text-sm text-slate-400">
+            Don't have an account?{' '}
+            <Link
+              to="/signup"
+              className="font-semibold text-indigo-300 transition-colors hover:text-white"
+            >
+              Sign up
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

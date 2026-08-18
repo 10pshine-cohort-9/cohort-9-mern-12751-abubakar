@@ -72,9 +72,12 @@ describe('DashboardPage', () => {
 
     renderDashboard();
 
-    expect(
-      screen.getByText(/loading your notes/i)
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(notesService.getNotes).toHaveBeenCalledWith({
+        search: undefined,
+        sortBy: 'updatedAt',
+      });
+    });
 
     expect(
       await screen.findByRole('heading', {

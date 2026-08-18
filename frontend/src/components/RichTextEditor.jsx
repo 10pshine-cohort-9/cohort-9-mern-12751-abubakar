@@ -33,7 +33,7 @@ const RichTextEditor = ({
   placeholder = 'Start writing...',
 }) => {
   return (
-    <div className="overflow-hidden rounded-xl border border-white/10 bg-white/5">
+    <div className="ql-shell">
       <ReactQuill
         theme="snow"
         value={value}
