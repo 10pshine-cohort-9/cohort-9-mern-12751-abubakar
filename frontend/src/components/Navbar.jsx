@@ -11,7 +11,7 @@ const Navbar = () => {
           to={user ? '/dashboard' : '/login'}
           className="text-xl font-bold text-white"
         >
-          MyApp
+          NotesApp
         </Link>
 
         <div className="flex items-center gap-4">
