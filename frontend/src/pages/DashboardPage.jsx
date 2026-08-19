@@ -17,34 +17,45 @@ const DashboardPage = () => {
   const [deletingId, setDeletingId] = useState(null);
   const [error, setError] = useState('');
 
-  const loadNotes = useCallback(async () => {
-    setLoading(true);
-    setError('');
-
-    try {
-      const response = await getNotes({
-        search: search.trim() || undefined,
-        sortBy,
-      });
-
-      setNotes(response.data || []);
-    } catch (requestError) {
-      setError(
-        requestError.response?.data?.error ||
-          'Unable to load your notes. Please try again.'
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, [search, sortBy]);
-
   useEffect(() => {
+    let active = true;
+
+    const loadNotes = async () => {
+      setLoading(true);
+      setError('');
+
+      try {
+        const response = await getNotes({
+          search: search.trim() || undefined,
+          sortBy,
+        });
+
+        if (active) {
+          setNotes(response.data || []);
+        }
+      } catch (requestError) {
+        if (active) {
+          setError(
+            requestError.response?.data?.error ||
+              'Unable to load your notes. Please try again.'
+          );
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
     const timeoutId = setTimeout(() => {
       loadNotes();
     }, 300);
 
-    return () => clearTimeout(timeoutId);
-  }, [loadNotes]);
+    return () => {
+      active = false;
+      clearTimeout(timeoutId);
+    };
+  }, [search, sortBy]);
 
   const availableTags = useMemo(() => {
     const tagSet = new Set();
@@ -98,7 +109,7 @@ const DashboardPage = () => {
     } catch (requestError) {
       setError(
         requestError.response?.data?.error ||
-          'Unable to delete the note. Please try again.'
+        'Unable to delete the note. Please try again.'
       );
     } finally {
       setDeletingId(null);
@@ -196,11 +207,10 @@ const DashboardPage = () => {
             <button
               type="button"
               onClick={() => setSelectedTag('all')}
-              className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all ${
-                selectedTag === 'all'
+              className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all ${selectedTag === 'all'
                   ? 'border-indigo-400/30 bg-indigo-500/15 text-indigo-300 shadow-sm shadow-indigo-500/10'
                   : 'border-white/10 bg-white/5 text-slate-400 hover:border-white/20 hover:bg-white/10 hover:text-white'
-              }`}
+                }`}
             >
               All notes
             </button>
@@ -210,11 +220,10 @@ const DashboardPage = () => {
                 key={tag}
                 type="button"
                 onClick={() => setSelectedTag(tag)}
-                className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all ${
-                  selectedTag.toLowerCase() === tag.toLowerCase()
+                className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all ${selectedTag.toLowerCase() === tag.toLowerCase()
                     ? 'border-indigo-400/30 bg-indigo-500/15 text-indigo-300 shadow-sm shadow-indigo-500/10'
                     : 'border-white/10 bg-white/5 text-slate-400 hover:border-white/20 hover:bg-white/10 hover:text-white'
-                }`}
+                  }`}
               >
                 {tag}
               </button>
@@ -315,6 +324,7 @@ const DashboardPage = () => {
                 <NoteCard
                   note={note}
                   onDelete={handleDelete}
+                  deletingId={deletingId}
                 />
               </div>
             ))}

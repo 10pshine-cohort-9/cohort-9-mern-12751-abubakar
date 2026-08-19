@@ -28,6 +28,8 @@ const NoteEditorPage = () => {
       return;
     }
 
+    let active = true;
+
     const loadNote = async () => {
       setLoading(true);
       setError('');
@@ -35,20 +37,30 @@ const NoteEditorPage = () => {
       try {
         const note = await getNote(id);
 
-        setTitle(note.title || '');
-        setContent(note.content || '');
-        setTags(Array.isArray(note.tags) ? note.tags : []);
+        if (active) {
+          setTitle(note.title || '');
+          setContent(note.content || '');
+          setTags(Array.isArray(note.tags) ? note.tags : []);
+        }
       } catch (requestError) {
-        setError(
-          requestError.response?.data?.error ||
-            'Unable to load this note.'
-        );
+        if (active) {
+          setError(
+            requestError.response?.data?.error ||
+              'Unable to load this note.'
+          );
+        }
       } finally {
-        setLoading(false);
+        if (active) {
+          setLoading(false);
+        }
       }
     };
 
     loadNote();
+
+    return () => {
+      active = false;
+    };
   }, [id, isEditing]);
 
   const addTag = () => {
@@ -141,7 +153,7 @@ const NoteEditorPage = () => {
     } catch (requestError) {
       setError(
         requestError.response?.data?.error ||
-          `Unable to ${isEditing ? 'update' : 'create'} the note.`
+        `Unable to ${isEditing ? 'update' : 'create'} the note.`
       );
     } finally {
       setSaving(false);

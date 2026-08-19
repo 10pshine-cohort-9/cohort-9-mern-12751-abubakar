@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const NoteCard = ({ note, onDelete }) => {
+const NoteCard = ({ note, onDelete, deletingId }) => {
   const preview = note.content
     ? note.content.replace(/<[^>]*>/g, '').trim()
     : 'No content yet.';
@@ -57,7 +57,8 @@ const NoteCard = ({ note, onDelete }) => {
         <button
           type="button"
           onClick={() => onDelete(note._id)}
-          className="rounded-lg px-3 py-2 text-sm font-medium text-red-300 transition-colors hover:bg-red-500/10 hover:text-red-200"
+          disabled={deletingId === note._id}
+          className="rounded-lg px-3 py-2 text-sm font-medium text-red-300 transition-colors hover:bg-red-500/10 hover:text-red-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Delete
         </button>
