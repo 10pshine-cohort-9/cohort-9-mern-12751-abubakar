@@ -13,6 +13,7 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import DashboardPage from './pages/DashboardPage';
 import NoteEditorPage from './pages/NoteEditorPage';
+import NoteReaderPage from './pages/NoteReaderPage';
 
 import './App.css';
 
@@ -86,6 +87,11 @@ const AppRoutes = () => {
           <Route
             path="/notes/new"
             element={<NoteEditorPage />}
+          />
+
+          <Route
+            path="/notes/:id"
+            element={<NoteReaderPage />}
           />
 
           <Route

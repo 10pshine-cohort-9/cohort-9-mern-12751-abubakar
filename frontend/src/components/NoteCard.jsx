@@ -48,8 +48,16 @@ const NoteCard = ({ note, onDelete, deletingId }) => {
 
       <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
         <Link
-          to={`/notes/${note._id}/edit`}
-          className="rounded-lg px-3 py-2 text-sm font-medium text-indigo-300 transition-colors hover:bg-indigo-500/10 hover:text-indigo-200"
+          to={`/notes/${note._id}`}
+          className="rounded-lg px-3 py-2 text-sm font-medium text-slate-200 transition-colors hover:bg-white/5 hover:text-white"
+        >
+           View
+        </Link>
+
+      <div className="flex items-center gap-2">
+        <Link
+        to={`/notes/${note._id}/edit`}
+        className="rounded-lg px-3 py-2 text-sm font-medium text-indigo-300 transition-colors hover:bg-indigo-500/10 hover:text-indigo-200"
         >
           Edit
         </Link>
@@ -57,12 +65,12 @@ const NoteCard = ({ note, onDelete, deletingId }) => {
         <button
           type="button"
           onClick={() => onDelete(note._id)}
-          disabled={deletingId === note._id}
-          className="rounded-lg px-3 py-2 text-sm font-medium text-red-300 transition-colors hover:bg-red-500/10 hover:text-red-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-lg px-3 py-2 text-sm font-medium text-red-300 transition-colors hover:bg-red-500/10 hover:text-red-200"
         >
           Delete
         </button>
       </div>
+    </div>
     </article>
   );
 };
