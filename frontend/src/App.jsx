@@ -7,8 +7,10 @@ import {
 } from 'react-router-dom';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
+
 import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
+
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import DashboardPage from './pages/DashboardPage';
@@ -18,14 +20,15 @@ import ProfilePage from './pages/ProfilePage';
 
 import './App.css';
 
-// Routes that should only be available to logged-out users.
 const PublicRoute = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
-        <p className="text-gray-300">Loading...</p>
+        <p className="theme-muted text-gray-300">
+          Loading...
+        </p>
       </div>
     );
   }
@@ -37,27 +40,27 @@ const PublicRoute = () => {
   return <Outlet />;
 };
 
-// Keeps Navbar visible across application.
 const AppLayout = () => {
   return (
-    <>
+    <div className="app-shell">
       <Navbar />
 
       <main className="px-4 py-6 sm:px-6">
         <Outlet />
       </main>
-    </>
+    </div>
   );
 };
 
-// Sends unknown routes to the appropriate destination.
 const NotFoundRedirect = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
-        <p className="text-gray-300">Loading...</p>
+        <p className="theme-muted text-gray-300">
+          Loading...
+        </p>
       </div>
     );
   }

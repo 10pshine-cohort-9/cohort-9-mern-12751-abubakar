@@ -414,14 +414,14 @@ const DashboardPage = () => {
             {menuOpen && (
               <div
                 role="menu"
-                className="absolute right-0 top-full z-30 mt-2 w-52 overflow-hidden rounded-xl border border-white/10 bg-slate-900/95 p-1.5 shadow-2xl shadow-black/30 backdrop-blur-xl"
+                className="theme-menu absolute right-0 top-full z-30 mt-2 w-52 overflow-hidden rounded-xl border border-white/10 bg-slate-900/95 p-1.5 shadow-2xl shadow-black/30 backdrop-blur-xl"
               >
                 <button
                   type="button"
                   role="menuitem"
                   onClick={openExportDialog}
                   disabled={notes.length === 0}
-                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm text-slate-300 transition-colors hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+                  className="theme-menu-item flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <span aria-hidden="true">↓</span>
                   Export notes
@@ -435,7 +435,7 @@ const DashboardPage = () => {
                     importInputRef.current?.click();
                   }}
                   disabled={importing}
-                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm text-slate-300 transition-colors hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+                  className="theme-menu-item flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <span aria-hidden="true">↑</span>
                   Import notes

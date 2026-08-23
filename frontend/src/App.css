@@ -347,3 +347,433 @@ button:disabled {
 .note-reader-content code {
   color: rgb(224 231 255);
 }
+
+
+/* =========================================================
+   THEME SYSTEM
+   ========================================================= */
+
+.theme-heading {
+  color: white;
+}
+
+.theme-muted {
+  color: rgb(148 163 184);
+}
+
+.theme-navbar {
+  color: white;
+}
+
+.theme-control {
+  color: rgb(203 213 225);
+}
+
+.theme-button {
+  color: rgb(203 213 225);
+}
+
+.theme-nav-link {
+  color: rgb(148 163 184);
+}
+
+.theme-nav-active {
+  color: white;
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+html[data-theme='light'] .app-shell {
+  color: #0f172a;
+}
+
+html[data-theme='light'] .app-shell::before {
+  background: rgb(99 102 241);
+  opacity: 0.09;
+}
+
+html[data-theme='light'] .app-shell::after {
+  background: rgb(168 85 247);
+  opacity: 0.08;
+}
+
+html[data-theme='light'] .theme-navbar {
+  border-color: rgb(15 23 42 / 0.08) !important;
+  background: rgb(255 255 255 / 0.72) !important;
+  color: #0f172a;
+}
+
+html[data-theme='light'] .theme-heading {
+  color: #0f172a;
+}
+
+html[data-theme='light'] .theme-muted {
+  color: #64748b !important;
+}
+
+html[data-theme='light'] .theme-control {
+  border-color: rgb(15 23 42 / 0.08) !important;
+  background: rgb(255 255 255 / 0.7) !important;
+  color: #334155 !important;
+}
+
+html[data-theme='light'] .theme-button {
+  border-color: rgb(15 23 42 / 0.08) !important;
+  background: rgb(255 255 255 / 0.7) !important;
+  color: #334155 !important;
+}
+
+html[data-theme='light'] .theme-button:hover,
+html[data-theme='light'] .theme-control:hover {
+  background: rgb(15 23 42 / 0.06) !important;
+  color: #0f172a !important;
+}
+
+html[data-theme='light'] .theme-nav-link {
+  color: #64748b !important;
+}
+
+html[data-theme='light'] .theme-nav-link:hover {
+  background: rgb(15 23 42 / 0.05) !important;
+  color: #0f172a !important;
+}
+
+html[data-theme='light'] .theme-nav-active {
+  background: rgb(15 23 42 / 0.06) !important;
+  color: #0f172a !important;
+}
+
+/* =========================================================
+   LIGHT THEME - EXISTING TAILWIND UTILITIES
+   ========================================================= */
+
+/* Main backgrounds */
+
+html[data-theme='light'] .bg-slate-900,
+html[data-theme='light'] .bg-slate-950 {
+  background-color: #ffffff !important;
+}
+
+html[data-theme='light'] .bg-black\/20 {
+  background-color: rgb(255 255 255 / 0.72) !important;
+}
+
+html[data-theme='light'] .bg-white\/5 {
+  background-color: rgb(255 255 255 / 0.72) !important;
+}
+
+html[data-theme='light'] .bg-white\/10 {
+  background-color: rgb(15 23 42 / 0.06) !important;
+}
+
+html[data-theme='light'] .bg-white\/\[0\.03\] {
+  background-color: rgb(255 255 255 / 0.7) !important;
+}
+
+html[data-theme='light'] .bg-white\/\[0\.04\] {
+  background-color: rgb(255 255 255 / 0.74) !important;
+}
+
+html[data-theme='light'] .bg-white\/\[0\.05\] {
+  background-color: rgb(255 255 255 / 0.8) !important;
+}
+
+html[data-theme='light'] .bg-indigo-500\/10 {
+  background-color: rgb(99 102 241 / 0.08) !important;
+}
+
+html[data-theme='light'] .bg-indigo-500\/15 {
+  background-color: rgb(99 102 241 / 0.12) !important;
+}
+
+html[data-theme='light'] .bg-indigo-500\/20 {
+  background-color: rgb(99 102 241 / 0.16) !important;
+}
+
+html[data-theme='light'] .bg-indigo-500\/\[0\.06\] {
+  background-color: rgb(99 102 241 / 0.06) !important;
+}
+
+/* Text */
+
+html[data-theme='light'] .text-white {
+  color: #0f172a !important;
+}
+
+html[data-theme='light'] .text-slate-200,
+html[data-theme='light'] .text-gray-200 {
+  color: #334155 !important;
+}
+
+html[data-theme='light'] .text-slate-300,
+html[data-theme='light'] .text-gray-300 {
+  color: #475569 !important;
+}
+
+html[data-theme='light'] .text-slate-400,
+html[data-theme='light'] .text-gray-400 {
+  color: #64748b !important;
+}
+
+html[data-theme='light'] .text-slate-500,
+html[data-theme='light'] .text-gray-500 {
+  color: #64748b !important;
+}
+
+html[data-theme='light'] .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+html[data-theme='light'] .text-indigo-300 {
+  color: #4f46e5 !important;
+}
+
+html[data-theme='light'] .text-red-300 {
+  color: #dc2626 !important;
+}
+
+html[data-theme='light'] .text-emerald-300 {
+  color: #059669 !important;
+}
+
+/* Borders */
+
+html[data-theme='light'] .border-white\/10 {
+  border-color: rgb(15 23 42 / 0.09) !important;
+}
+
+html[data-theme='light'] .border-white\/20 {
+  border-color: rgb(15 23 42 / 0.14) !important;
+}
+
+html[data-theme='light'] .border-indigo-400\/20 {
+  border-color: rgb(79 70 229 / 0.18) !important;
+}
+
+html[data-theme='light'] .border-indigo-400\/30 {
+  border-color: rgb(79 70 229 / 0.28) !important;
+}
+
+/* Inputs / selects */
+
+html[data-theme='light'] input,
+html[data-theme='light'] select,
+html[data-theme='light'] textarea {
+  color: #0f172a;
+}
+
+html[data-theme='light'] input::placeholder,
+html[data-theme='light'] textarea::placeholder {
+  color: #94a3b8;
+}
+
+html[data-theme='light'] .bg-slate-900 option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+/* =========================================================
+   LIGHT THEME - GLASS
+   ========================================================= */
+
+html[data-theme='light'] .glass-surface {
+  border-color: rgb(15 23 42 / 0.08);
+  background: rgb(255 255 255 / 0.68);
+  box-shadow:
+    0 20px 50px rgb(15 23 42 / 0.08),
+    inset 0 1px 0 rgb(255 255 255 / 0.85);
+}
+
+html[data-theme='light'] .glass-surface-hover:hover {
+  border-color: rgb(15 23 42 / 0.13);
+  background: rgb(255 255 255 / 0.82);
+  box-shadow:
+    0 24px 60px rgb(15 23 42 / 0.12),
+    inset 0 1px 0 rgb(255 255 255 / 0.9);
+}
+
+/* =========================================================
+   LIGHT THEME - QUILL
+   ========================================================= */
+
+html[data-theme='light'] .ql-shell {
+  border-color: rgb(15 23 42 / 0.1);
+  background: rgb(255 255 255 / 0.82);
+  box-shadow:
+    0 15px 40px rgb(15 23 42 / 0.08),
+    inset 0 1px 0 rgb(255 255 255 / 0.9);
+}
+
+html[data-theme='light'] .ql-shell:focus-within {
+  border-color: rgb(79 70 229 / 0.4);
+  box-shadow:
+    0 0 0 3px rgb(99 102 241 / 0.12),
+    0 15px 40px rgb(15 23 42 / 0.1);
+}
+
+html[data-theme='light'] .ql-shell .ql-toolbar.ql-snow {
+  border-bottom-color: rgb(15 23 42 / 0.08);
+  background:
+    linear-gradient(
+      180deg,
+      rgb(248 250 252),
+      rgb(241 245 249)
+    );
+}
+
+html[data-theme='light'] .ql-shell .ql-editor {
+  color: #334155;
+}
+
+html[data-theme='light'] .ql-shell .ql-editor.ql-blank::before {
+  color: #94a3b8;
+}
+
+html[data-theme='light'] .ql-shell .ql-snow .ql-stroke {
+  stroke: #64748b;
+}
+
+html[data-theme='light'] .ql-shell .ql-snow .ql-fill {
+  fill: #64748b;
+}
+
+html[data-theme='light'] .ql-shell .ql-snow .ql-picker {
+  color: #64748b;
+}
+
+html[data-theme='light'] .ql-shell .ql-snow .ql-picker-options {
+  border-color: rgb(15 23 42 / 0.08);
+  background: #ffffff;
+}
+
+html[data-theme='light'] .ql-shell .ql-snow button:hover .ql-stroke,
+html[data-theme='light'] .ql-shell .ql-snow button:focus .ql-stroke,
+html[data-theme='light'] .ql-shell .ql-snow button.ql-active .ql-stroke {
+  stroke: #4f46e5;
+}
+
+html[data-theme='light'] .ql-shell .ql-snow button:hover .ql-fill,
+html[data-theme='light'] .ql-shell .ql-snow button:focus .ql-fill,
+html[data-theme='light'] .ql-shell .ql-snow button.ql-active .ql-fill {
+  fill: #4f46e5;
+}
+
+html[data-theme='light'] .ql-shell .ql-snow .ql-picker-label:hover,
+html[data-theme='light'] .ql-shell .ql-snow .ql-picker-label:focus,
+html[data-theme='light'] .ql-shell .ql-snow .ql-picker-item:hover {
+  color: #4f46e5;
+}
+
+html[data-theme='light'] .ql-shell .ql-snow .ql-tooltip {
+  border-color: rgb(15 23 42 / 0.08);
+  background: #ffffff;
+  color: #334155;
+  box-shadow: 0 16px 35px rgb(15 23 42 / 0.15);
+}
+
+html[data-theme='light'] .ql-shell .ql-snow .ql-tooltip input {
+  border-color: rgb(15 23 42 / 0.1);
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+html[data-theme='light'] .ql-shell .ql-snow .ql-tooltip a {
+  color: #4f46e5;
+}
+
+/* =========================================================
+   LIGHT THEME - READER
+   ========================================================= */
+
+html[data-theme='light'] .note-reader-content {
+  color: #475569;
+}
+
+html[data-theme='light'] .note-reader-content h1,
+html[data-theme='light'] .note-reader-content h2,
+html[data-theme='light'] .note-reader-content h3 {
+  color: #0f172a;
+}
+
+html[data-theme='light'] .note-reader-content blockquote {
+  color: #64748b;
+}
+
+html[data-theme='light'] .note-reader-content a {
+  color: #4f46e5;
+}
+
+html[data-theme='light'] .note-reader-content pre {
+  border-color: rgb(15 23 42 / 0.08);
+  background: #f1f5f9;
+}
+
+html[data-theme='light'] .note-reader-content code {
+  color: #3730a3;
+}
+
+/* =========================================================
+   LIGHT THEME - SCROLLBAR
+   ========================================================= */
+
+html[data-theme='light'] {
+  scrollbar-color: rgb(148 163 184) transparent;
+}
+
+html[data-theme='light'] *::-webkit-scrollbar-thumb {
+  background: rgb(148 163 184);
+}
+
+html[data-theme='light'] *::-webkit-scrollbar-thumb:hover {
+  background: rgb(100 116 139);
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/*
+=========================================================
+   THEME MENU
+   ========================================================= */
+.theme-menu {
+  color: rgb(203 213 225);
+}
+
+.theme-menu-item {
+  color: rgb(203 213 225);
+}
+
+.theme-menu-item:hover {
+  background: rgb(255 255 255 / 0.05);
+  color: white;
+}
+
+html[data-theme='light'] .theme-menu {
+  border-color: rgb(15 23 42 / 0.08) !important;
+  background: rgb(255 255 255 / 0.96) !important;
+  color: #334155 !important;
+  box-shadow: 0 20px 50px rgb(15 23 42 / 0.14);
+}
+
+html[data-theme='light'] .theme-menu-item {
+  color: #475569 !important;
+}
+
+html[data-theme='light'] .theme-menu-item:hover {
+  background: rgb(15 23 42 / 0.05) !important;
+  color: #0f172a !important;
+}

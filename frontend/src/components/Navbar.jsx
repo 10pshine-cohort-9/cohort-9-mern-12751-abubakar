@@ -1,31 +1,56 @@
 import { Link, useLocation } from 'react-router-dom';
+
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
 
   const isActive = (path) =>
     location.pathname === path;
 
+  const isDark = theme === 'dark';
+
   return (
-    <nav className="border-b border-white/10 bg-black/20 backdrop-blur-md">
+    <nav className="theme-navbar border-b border-white/10 bg-black/20 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
         <Link
           to={user ? '/dashboard' : '/login'}
-          className="text-xl font-bold tracking-tight text-white transition-opacity hover:opacity-90"
+          className="theme-heading text-xl font-bold tracking-tight transition-opacity hover:opacity-90"
         >
           NoteSpace
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-4">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={
+              isDark
+                ? 'Switch to light mode'
+                : 'Switch to dark mode'
+            }
+            title={
+              isDark
+                ? 'Switch to light mode'
+                : 'Switch to dark mode'
+            }
+            className="theme-control flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-base transition-all hover:bg-white/10"
+          >
+            <span aria-hidden="true">
+              {isDark ? '☀' : '☾'}
+            </span>
+          </button>
+
           {user ? (
             <>
               <Link
                 to="/dashboard"
-                className={`rounded-lg px-3 py-2 text-sm transition-colors ${
+                className={`theme-nav-link rounded-lg px-3 py-2 text-sm transition-colors ${
                   isActive('/dashboard')
-                    ? 'bg-white/10 text-white'
+                    ? 'theme-nav-active bg-white/10'
                     : 'text-slate-400 hover:bg-white/5 hover:text-white'
                 }`}
               >
@@ -34,9 +59,9 @@ const Navbar = () => {
 
               <Link
                 to="/profile"
-                className={`rounded-lg px-3 py-2 text-sm transition-colors ${
+                className={`theme-nav-link rounded-lg px-3 py-2 text-sm transition-colors ${
                   isActive('/profile')
-                    ? 'bg-white/10 text-white'
+                    ? 'theme-nav-active bg-white/10'
                     : 'text-slate-400 hover:bg-white/5 hover:text-white'
                 }`}
               >
@@ -45,14 +70,16 @@ const Navbar = () => {
 
               <div className="hidden h-5 w-px bg-white/10 sm:block" />
 
-              <span className="hidden text-sm text-slate-400 md:block">
-                {user.fullName || user.name || user.email}
+              <span className="theme-muted hidden text-sm md:block">
+                {user.fullName ||
+                  user.name ||
+                  user.email}
               </span>
 
               <button
                 type="button"
                 onClick={logout}
-                className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-white/10 hover:text-white"
+                className="theme-button rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium transition-colors hover:bg-white/10"
               >
                 Logout
               </button>
@@ -61,9 +88,9 @@ const Navbar = () => {
             <>
               <Link
                 to="/login"
-                className={`rounded-lg px-3 py-2 text-sm transition-colors ${
+                className={`theme-nav-link rounded-lg px-3 py-2 text-sm transition-colors ${
                   isActive('/login')
-                    ? 'text-white'
+                    ? 'theme-nav-active'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
