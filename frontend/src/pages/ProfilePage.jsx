@@ -59,7 +59,7 @@ const ProfilePage = () => {
       <div className="space-y-6">
         <div className="glass-surface rounded-3xl p-6 sm:p-8">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
-            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-3xl border border-indigo-400/20 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 text-2xl font-bold text-indigo-200">
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-3xl border border-indigo-400/20 bg-linear-to-br from-indigo-500/20 to-purple-500/20 text-2xl font-bold text-indigo-200">
               {initials || 'U'}
             </div>
 

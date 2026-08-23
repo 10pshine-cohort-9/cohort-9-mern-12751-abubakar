@@ -72,7 +72,7 @@ const Navbar = () => {
 
               <Link
                 to="/signup"
-                className="rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 px-4 py-2 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/20"
+                className="rounded-lg bg-linear-to-r from-indigo-500 to-purple-500 px-4 py-2 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/20"
               >
                 Sign Up
               </Link>

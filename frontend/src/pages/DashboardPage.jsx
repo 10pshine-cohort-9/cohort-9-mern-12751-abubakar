@@ -384,10 +384,10 @@ const DashboardPage = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:flex-nowrap sm:gap-3">
           <Link
             to="/notes/new"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/25"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-indigo-500 to-purple-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/25"
           >
             <span aria-hidden="true">+</span>
             New Note
@@ -582,7 +582,7 @@ const DashboardPage = () => {
       {selectionMode &&
         !loading &&
         filteredNotes.length > 0 && (
-          <div className="mb-4 flex flex-col gap-3 rounded-xl border border-indigo-400/20 bg-indigo-500/[0.06] px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mb-4 flex flex-col gap-3 rounded-xl border border-indigo-400/20 bg-indigo-500/6 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <button
                 type="button"
@@ -690,15 +690,15 @@ const DashboardPage = () => {
             </p>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
             {filteredNotes.map((note) => (
               <div
                 key={note._id}
-                className={
+                className={`min-w-0 ${
                   deletingId === note._id
                     ? 'pointer-events-none opacity-50'
                     : 'relative page-enter'
-                }
+                }`}
               >
                 {selectionMode && (
                   <label className="absolute left-3 top-3 z-20 flex cursor-pointer items-center">
@@ -829,7 +829,7 @@ const DashboardPage = () => {
                       }
                     : startSelectedExport
                 }
-                className="rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 px-4 py-2.5 text-sm font-semibold text-white"
+                className="rounded-xl bg-linear-to-r from-indigo-500 to-purple-500 px-4 py-2.5 text-sm font-semibold text-white"
               >
                 {exportMode === 'all'
                   ? 'Export all'
