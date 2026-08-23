@@ -14,6 +14,7 @@ import SignUpPage from './pages/SignUpPage';
 import DashboardPage from './pages/DashboardPage';
 import NoteEditorPage from './pages/NoteEditorPage';
 import NoteReaderPage from './pages/NoteReaderPage';
+import ProfilePage from './pages/ProfilePage';
 
 import './App.css';
 
@@ -82,6 +83,11 @@ const AppRoutes = () => {
           <Route
             path="/dashboard"
             element={<DashboardPage />}
+          />
+
+          <Route
+            path="/profile"
+            element={<ProfilePage />}
           />
 
           <Route

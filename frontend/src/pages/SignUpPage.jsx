@@ -97,11 +97,11 @@ const SignUpPage = () => {
         <div className="glass-surface relative overflow-hidden rounded-3xl p-6 sm:p-8">
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-purple-400/20 bg-purple-500/10">
-              <span className="text-xl">✦</span>
+              <span className="text-xl">📑</span>
             </div>
 
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-purple-300">
-              NotesApp
+              NoteSpace
             </p>
 
             <h1 className="text-3xl font-bold tracking-tight text-white">

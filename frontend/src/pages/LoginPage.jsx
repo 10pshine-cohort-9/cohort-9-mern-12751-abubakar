@@ -76,11 +76,11 @@ const LoginPage = () => {
         <div className="glass-surface relative overflow-hidden rounded-3xl p-6 sm:p-8">
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-indigo-400/20 bg-indigo-500/10">
-              <span className="text-xl">✦</span>
+              <span className="text-xl">📑</span>
             </div>
 
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300">
-              NotesApp
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-indigo-300">
+              NoteSpace
             </p>
 
             <h1 className="text-3xl font-bold tracking-tight text-white">
