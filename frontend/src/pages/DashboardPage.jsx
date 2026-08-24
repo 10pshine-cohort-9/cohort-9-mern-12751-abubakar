@@ -46,6 +46,7 @@ const DashboardPage = () => {
 
   const importInputRef = useRef(null);
   const menuRef = useRef(null);
+  const exportDialogRef = useRef(null);
 
   const loadNotes = useCallback(async () => {
     setLoading(true);
@@ -66,7 +67,7 @@ const DashboardPage = () => {
     } catch (requestError) {
       setError(
         requestError.response?.data?.error ||
-          'Unable to load your notes. Please try again.'
+        'Unable to load your notes. Please try again.'
       );
     } finally {
       setLoading(false);
@@ -198,6 +199,27 @@ const DashboardPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (!exportDialogOpen) {
+      return undefined;
+    }
+
+    if (exportDialogRef.current) {
+      exportDialogRef.current.focus();
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        closeExportDialog();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () =>
+      document.removeEventListener('keydown', handleKeyDown);
+  }, [exportDialogOpen, exportMode, importing]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const startSelectedExport = () => {
     clearMessages();
     setExportDialogOpen(false);
@@ -234,8 +256,7 @@ const DashboardPage = () => {
       exportNotesToJson(notes);
 
       setSuccess(
-        `${notes.length} ${
-          notes.length === 1 ? 'note' : 'notes'
+        `${notes.length} ${notes.length === 1 ? 'note' : 'notes'
         } exported successfully.`
       );
 
@@ -264,8 +285,7 @@ const DashboardPage = () => {
       exportNotesToJson(selectedNotes);
 
       setSuccess(
-        `${selectedNotes.length} ${
-          selectedNotes.length === 1 ? 'note' : 'notes'
+        `${selectedNotes.length} ${selectedNotes.length === 1 ? 'note' : 'notes'
         } exported successfully.`
       );
 
@@ -298,27 +318,29 @@ const DashboardPage = () => {
         );
       }
 
-      let importedCount = 0;
-
       for (const note of importedNotes) {
         await createNote(note);
         importedCount += 1;
       }
 
-      await loadNotes();
-
       setSuccess(
-        `${importedCount} ${
-          importedCount === 1 ? 'note' : 'notes'
+        `${importedCount} ${importedCount === 1 ? 'note' : 'notes'
         } imported successfully.`
       );
     } catch (importError) {
+      const partialNotice =
+        importedCount > 0
+          ? ` ${importedCount} note(s) were already imported.`
+          : '';
       setError(
         importError.response?.data?.error ||
-          importError.message ||
-          'Unable to import your notes. Please try again.'
-      );
+        importError.message ||
+        'Unable to import your notes. Please try again.') +
+        partialNotice
     } finally {
+      if (importedCount > 0) {
+        await loadNotes();
+      }
       setImporting(false);
 
       if (importInputRef.current) {
@@ -356,7 +378,7 @@ const DashboardPage = () => {
     } catch (requestError) {
       setError(
         requestError.response?.data?.error ||
-          'Unable to delete the note. Please try again.'
+        'Unable to delete the note. Please try again.'
       );
     } finally {
       setDeletingId(null);
@@ -529,11 +551,10 @@ const DashboardPage = () => {
             <button
               type="button"
               onClick={() => setSelectedTag('all')}
-              className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all ${
-                selectedTag === 'all'
+              className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all ${selectedTag === 'all'
                   ? 'border-indigo-400/30 bg-indigo-500/15 text-indigo-300'
                   : 'border-white/10 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white'
-              }`}
+                }`}
             >
               All notes
             </button>
@@ -543,12 +564,11 @@ const DashboardPage = () => {
                 key={tag}
                 type="button"
                 onClick={() => setSelectedTag(tag)}
-                className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all ${
-                  selectedTag.toLowerCase() ===
-                  tag.toLowerCase()
+                className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all ${selectedTag.toLowerCase() ===
+                    tag.toLowerCase()
                     ? 'border-indigo-400/30 bg-indigo-500/15 text-indigo-300'
                     : 'border-white/10 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white'
-                }`}
+                  }`}
               >
                 {tag}
               </button>
@@ -694,11 +714,10 @@ const DashboardPage = () => {
             {filteredNotes.map((note) => (
               <div
                 key={note._id}
-                className={`min-w-0 ${
-                  deletingId === note._id
+                className={`min-w-0 ${deletingId === note._id
                     ? 'pointer-events-none opacity-50'
                     : 'relative page-enter'
-                }`}
+                  }`}
               >
                 {selectionMode && (
                   <label className="absolute left-3 top-3 z-20 flex cursor-pointer items-center">
@@ -730,7 +749,9 @@ const DashboardPage = () => {
       {/* Export dialog */}
       {exportDialogOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+          ref={exportDialogRef}
+          tabIndex={-1}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm outline-none"
           role="dialog"
           aria-modal="true"
           aria-labelledby="export-dialog-title"
@@ -752,11 +773,10 @@ const DashboardPage = () => {
 
             <div className="space-y-3">
               <label
-                className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition ${
-                  exportMode === 'all'
+                className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition ${exportMode === 'all'
                     ? 'border-indigo-400/30 bg-indigo-500/10'
                     : 'border-white/10 bg-white/5 hover:bg-white/10'
-                }`}
+                  }`}
               >
                 <input
                   type="radio"
@@ -781,11 +801,10 @@ const DashboardPage = () => {
               </label>
 
               <label
-                className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition ${
-                  exportMode === 'selected'
+                className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition ${exportMode === 'selected'
                     ? 'border-indigo-400/30 bg-indigo-500/10'
                     : 'border-white/10 bg-white/5 hover:bg-white/10'
-                }`}
+                  }`}
               >
                 <input
                   type="radio"
@@ -824,9 +843,9 @@ const DashboardPage = () => {
                 onClick={
                   exportMode === 'all'
                     ? () => {
-                        setExportDialogOpen(false);
-                        handleExportAll();
-                      }
+                      setExportDialogOpen(false);
+                      handleExportAll();
+                    }
                     : startSelectedExport
                 }
                 className="rounded-xl bg-linear-to-r from-indigo-500 to-purple-500 px-4 py-2.5 text-sm font-semibold text-white"

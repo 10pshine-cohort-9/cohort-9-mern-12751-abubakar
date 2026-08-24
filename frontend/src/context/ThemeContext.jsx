@@ -31,7 +31,6 @@ export const ThemeProvider = ({ children }) => {
     root.dataset.theme = theme;
     root.style.colorScheme = theme;
 
-    localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
   useEffect(() => {
@@ -63,9 +62,13 @@ export const ThemeProvider = ({ children }) => {
   }, []);
 
   const toggleTheme = () => {
-    setTheme((currentTheme) =>
-      currentTheme === 'dark' ? 'light' : 'dark'
-    );
+    setTheme((currentTheme) => {
+      const nextTheme =
+        currentTheme === 'dark' ? 'light' : 'dark';
+    
+      localStorage.setItem(STORAGE_KEY, nextTheme);
+      return nextTheme;
+    });
   };
 
   const value = useMemo(

@@ -21,6 +21,7 @@ const NoteCard = ({ note, onDelete, deletingId }) => {
 
   return (
     <article
+      aria-busy={isDeleting}
       className={`group flex min-w-0 w-full h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl transition-all duration-300 sm:p-5 ${
         isDeleting
           ? 'pointer-events-none opacity-50'
@@ -36,7 +37,7 @@ const NoteCard = ({ note, onDelete, deletingId }) => {
           {updatedDate && (
             <time
               dateTime={note.updatedAt}
-              className="max-w-[90px] shrink-0 wrap-break-word text-right text-[11px] leading-4 text-slate-400 sm:max-w-none sm:text-xs"
+              className="max-w-22.5 shrink-0 wrap-break-word text-right text-[11px] leading-4 text-slate-400 sm:max-w-none sm:text-xs"
             >
               {updatedDate}
             </time>
@@ -64,6 +65,8 @@ const NoteCard = ({ note, onDelete, deletingId }) => {
       <div className="mt-5 flex min-w-0 flex-col gap-3 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
         <Link
           to={`/notes/${note._id}`}
+          tabIndex={isDeleting ? -1 : undefined}
+          aria-disabled={isDeleting || undefined}
           className="inline-flex min-w-0 items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-slate-200 transition-colors hover:bg-white/5 hover:text-white sm:justify-start"
         >
           View
@@ -72,6 +75,8 @@ const NoteCard = ({ note, onDelete, deletingId }) => {
         <div className="flex min-w-0 flex-wrap gap-2">
           <Link
             to={`/notes/${note._id}/edit`}
+            tabIndex={isDeleting ? -1 : undefined}
+            aria-disabled={isDeleting || undefined}
             className="inline-flex min-w-0 items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-indigo-300 transition-colors hover:bg-indigo-500/10 hover:text-indigo-200"
           >
             Edit

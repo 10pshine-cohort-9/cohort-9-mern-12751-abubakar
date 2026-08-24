@@ -89,7 +89,7 @@ const ProfilePage = () => {
 
             <p className="mt-1 text-sm text-slate-500">
               Your account information currently associated with
-              NotesSpace.
+              NoteSpace.
             </p>
           </div>
 

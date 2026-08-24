@@ -43,7 +43,13 @@ export const importNotesFromJson = async (file) => {
     throw new Error('Please select a JSON file.');
   }
 
-  const text = await file.text();
+  let text;
+
+  try {
+    text = await file.text();
+  } catch {
+    throw new Error('Unable to read the selected file.');
+  }
 
   let parsed;
 
