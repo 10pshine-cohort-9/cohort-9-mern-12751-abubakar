@@ -307,6 +307,7 @@ const DashboardPage = () => {
 
     setImporting(true);
     clearMessages();
+    let importedCount = 0;
 
     try {
       const importedNotes =
@@ -333,10 +334,11 @@ const DashboardPage = () => {
           ? ` ${importedCount} note(s) were already imported.`
           : '';
       setError(
-        importError.response?.data?.error ||
+        (importError.response?.data?.error ||
         importError.message ||
         'Unable to import your notes. Please try again.') +
         partialNotice
+      );
     } finally {
       if (importedCount > 0) {
         await loadNotes();
