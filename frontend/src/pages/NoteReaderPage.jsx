@@ -28,7 +28,7 @@ const NoteReaderPage = () => {
         if (mounted) {
           setError(
             requestError.response?.data?.error ||
-              'Unable to load this note.'
+            'Unable to load this note.'
           );
         }
       } finally {
@@ -92,13 +92,13 @@ const NoteReaderPage = () => {
 
   const formattedDate = note.updatedAt
     ? new Date(note.updatedAt).toLocaleDateString(
-        undefined,
-        {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        }
-      )
+      undefined,
+      {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }
+    )
     : '';
 
   return (
@@ -161,7 +161,7 @@ const NoteReaderPage = () => {
           </div>
         </header>
 
-        <div className="note-reader-content mt-8">
+        <div className="note-reader-content mt-8 break-words overflow-x-auto">
           <div
             dangerouslySetInnerHTML={{
               __html: note.content,
