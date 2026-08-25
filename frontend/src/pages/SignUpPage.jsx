@@ -59,7 +59,7 @@ const SignUpPage = () => {
     } catch (err) {
       setError(
         err.response?.data?.error ||
-          'Registration failed. Please try again.'
+        'Registration failed. Please try again.'
       );
     }
   };
@@ -84,24 +84,16 @@ const SignUpPage = () => {
   return (
     <div className="page-enter mx-auto flex min-h-[calc(100vh-8rem)] max-w-md items-center px-4 py-10 sm:px-0">
       <div className="relative w-full">
-        <div
-          aria-hidden="true"
-          className="absolute -left-10 top-1/3 h-36 w-36 rounded-full bg-purple-500/20 blur-3xl"
-        />
-
-        <div
-          aria-hidden="true"
-          className="absolute -right-8 bottom-0 h-32 w-32 rounded-full bg-indigo-500/20 blur-3xl"
-        />
-
         <div className="glass-surface relative overflow-hidden rounded-3xl p-6 sm:p-8">
           <div className="mb-8 text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-purple-400/20 bg-purple-500/10">
-              <span className="text-xl">✦</span>
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-indigo-400/20 bg-indigo-500/10">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
             </div>
 
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-purple-300">
-              NotesApp
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-indigo-300">
+              NoteSpace
             </p>
 
             <h1 className="text-3xl font-bold tracking-tight text-white">
@@ -226,18 +218,11 @@ const SignUpPage = () => {
             <button
               type="submit"
               disabled={authLoading}
-              className="group relative w-full overflow-hidden rounded-xl bg-linear-to-r from-indigo-500 to-purple-500 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/25 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+              className="w-full rounded-xl bg-indigo-500 py-3.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <span className="relative z-10">
-                {authLoading
-                  ? 'Creating account...'
-                  : 'Sign Up'}
-              </span>
-
-              <span
-                aria-hidden="true"
-                className="absolute inset-0 -translate-x-full bg-white/10 transition-transform duration-500 group-hover:translate-x-0"
-              />
+              {authLoading
+                ? 'Creating account...'
+                : 'Sign Up'}
             </button>
           </form>
 
