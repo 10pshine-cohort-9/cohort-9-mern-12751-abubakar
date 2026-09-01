@@ -2,6 +2,8 @@
 
 A full-stack note-taking web application built with MongoDB, Express 5, React 19, and Node.js. It features JWT-based authentication, a rich text editor, real-time search, tag filtering, dark/light theme switching, and JSON import/export capabilities.
 
+**Live Demo:** [https://notespace.onrender.com](https://notespace.onrender.com)
+
 ---
 
 ## Features
